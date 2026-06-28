@@ -1,12 +1,16 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users can read their own profile. All writes that change plan/credits
-    // happen server-side via the Admin SDK (which bypasses these rules),
-    // so the client is never allowed to write billing fields directly.
     match /users/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
-      allow write: if false;
+      // User may create their own profile on signup.
+      allow create: if request.auth != null && request.auth.uid == uid;
+      // User may update non-billing fields only. Plan & credits are changed
+      // exclusively by the server (Admin SDK bypasses these rules).
+      allow update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.plan == resource.data.plan
+        && request.resource.data.credits == resource.data.credits;
+      allow delete: if false;
     }
   }
 }
