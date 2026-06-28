@@ -52,8 +52,7 @@ export default function Dashboard() {
       setOutput(post)
       await consumeCredit()
     } catch (err) {
-      if (/NO_KEY/.test(err.message)) { setShowKey(true); setError('Add your free Gemini API key below to start generating.') }
-      else setError('Generation failed: ' + err.message)
+      setError('Generation failed: ' + err.message)
     } finally {
       setLoading(false)
     }
@@ -118,7 +117,10 @@ export default function Dashboard() {
                 </select>
               </div>
             </div>
-            {(showKey || !apiKey) && (
+            <button type="button" onClick={() => setShowKey(v => !v)} className="self-start text-[11px] text-gray-500 hover:text-gray-300">
+              {showKey ? 'Hide AI key settings' : 'Use your own Gemini key (optional, higher quality)'}
+            </button>
+            {showKey && (
               <div className="rounded-xl bg-white/5 border border-white/10 p-3 flex flex-col gap-2">
                 <label className="text-xs font-medium text-gray-300 flex items-center justify-between">
                   <span>Gemini API key (free)</span>
