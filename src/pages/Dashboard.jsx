@@ -92,24 +92,29 @@ export default function Dashboard() {
 
         <div className="grid lg:grid-cols-2 gap-5 sm:gap-6">
           <div className="glass rounded-2xl p-5 flex flex-col gap-4">
+            <div className="flex items-center gap-2 text-sm font-semibold text-white">
+              <span className="w-7 h-7 rounded-lg bg-indigo-500/15 flex items-center justify-center"><PenLine size={15} className="text-indigo-300" /></span>
+              Compose
+            </div>
             <div>
-              <label className="text-sm font-medium text-gray-300 mb-2 block">Your rough notes</label>
+              <label className="text-xs font-medium text-gray-400 mb-1.5 block">Your rough notes</label>
               <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={7}
                 placeholder="Paste your ideas or rough draft here... e.g. 'Failed 3 startups. Learned customer discovery is everything.'"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-none transition-colors text-sm" />
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/40 resize-none transition-all text-sm" />
+              <p className="text-[11px] text-gray-600 mt-1 text-right">{notes.trim() ? notes.trim().split(/\s+/).length : 0} words</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-sm font-medium text-gray-300 mb-2 block">Tone</label>
+                <label className="text-xs font-medium text-gray-400 mb-1.5 block">Tone</label>
                 <select value={tone} onChange={e => setTone(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-indigo-500 text-sm">
+                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-indigo-500 text-sm">
                   {TONES.map(t => <option key={t.value} value={t.value} className="bg-[#16161f]">{t.label}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-300 mb-2 block">Post Type</label>
+                <label className="text-xs font-medium text-gray-400 mb-1.5 block">Post Type</label>
                 <select value={type} onChange={e => setType(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-indigo-500 text-sm">
+                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-indigo-500 text-sm">
                   {TYPES.map(t => <option key={t.value} value={t.value} className="bg-[#16161f]">{t.label}</option>)}
                 </select>
               </div>
@@ -123,7 +128,10 @@ export default function Dashboard() {
 
           <div className="glass rounded-2xl p-5 flex flex-col min-h-[320px]">
             <div className="flex items-center justify-between mb-3">
-              <label className="text-sm font-medium text-gray-300">Generated Post</label>
+              <div className="flex items-center gap-2 text-sm font-semibold text-white">
+                <span className="w-7 h-7 rounded-lg bg-fuchsia-500/15 flex items-center justify-center"><Sparkles size={15} className="text-fuchsia-300" /></span>
+                Generated Post
+              </div>
               {output && (
                 <div className="flex gap-2">
                   <button onClick={handleGenerate} disabled={loading} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg glass glass-hover text-xs text-gray-300"><RefreshCw size={13} /> Regenerate</button>
@@ -155,7 +163,7 @@ export default function Dashboard() {
           <div className="mt-6 rounded-2xl bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-500/20 p-5 flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className="font-semibold text-white">{credits === 0 ? 'You’re out of credits' : 'Running low on credits'}</p>
-              <p className="text-gray-400 text-sm mt-0.5">Upgrade to Pro for unlimited AI posts every month.</p>
+              <p className="text-gray-400 text-sm mt-0.5">Upgrade to Pro for unlimited AI posts.</p>
             </div>
             <button onClick={() => navigate('/pricing')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl btn-grad text-sm font-semibold text-white transition-colors whitespace-nowrap">
               Upgrade <ChevronRight size={16} />
