@@ -4,12 +4,11 @@ service cloud.firestore {
     match /users/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
       allow create: if request.auth != null && request.auth.uid == uid;
-      // User can update their own profile but cannot change their plan, and
-      // credits are capped at the free limit (5) so they can't grant themselves more.
-      // This also allows the monthly reset (back up to 5).
+      // User cannot change their plan, and credits can only decrease
+      // (one-time free credits, never topped up client-side).
       allow update: if request.auth != null && request.auth.uid == uid
         && request.resource.data.plan == resource.data.plan
-        && request.resource.data.credits <= 5;
+        && request.resource.data.credits <= resource.data.credits;
       allow delete: if false;
     }
   }

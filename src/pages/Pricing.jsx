@@ -19,7 +19,7 @@ export default function Pricing() {
 
   const plans = [
     { id: 'free', name: 'Free', monthly: 0, yearly: 0, desc: 'Try PostCraft AI with no commitment.',
-      features: ['5 AI posts per month', '2 tone options', 'Basic post types', 'Copy to clipboard'], cta: 'Start Free' },
+      features: ['5 free AI posts', '2 tone options', 'Basic post types', 'Copy to clipboard'], cta: 'Start Free' },
     { id: 'pro', name: 'Pro', monthly: 19, yearly: 15, desc: 'For creators serious about LinkedIn growth.',
       features: ['Unlimited AI posts', 'All 6 tone options', 'All post types', 'Post history', 'Priority generation'],
       cta: 'Get Pro', highlight: true, badge: 'Most Popular',

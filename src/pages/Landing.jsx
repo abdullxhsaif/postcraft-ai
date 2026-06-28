@@ -81,7 +81,7 @@ export default function Landing() {
         <div className="grid sm:grid-cols-3 gap-5">
           {[
             { name: 'Free', price: '$0', desc: 'Try it with no commitment.', highlight: false,
-              features: ['5 AI posts / month', '2 tone options', 'Copy to clipboard'] },
+              features: ['5 free AI posts', '2 tone options', 'Copy to clipboard'] },
             { name: 'Pro', price: '$19', desc: 'For serious LinkedIn creators.', highlight: true, badge: 'Most Popular',
               features: ['Unlimited AI posts', 'All 6 tones', 'All post types', 'Post history'] },
             { name: 'Team', price: '$49', desc: 'For agencies and teams.', highlight: false,
