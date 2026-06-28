@@ -4,18 +4,22 @@ import { Sparkles, PenLine, CreditCard, Crown, LogOut, Menu, X, User } from 'luc
 import { useAuth } from '../context/AuthContext'
 
 function NavItems({ onNavigate, plan }) {
-  const item = "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors"
+  const item = "flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold transition-colors no-underline"
+  const isPaid = plan === 'pro' || plan === 'team'
   return (
-    <nav className="flex flex-col gap-1">
-      <Link to="/dashboard" onClick={onNavigate} className={`${item} btn-grad text-white no-underline`}>
+    <nav className="flex flex-col gap-2">
+      <Link to="/dashboard" onClick={onNavigate} className={`${item} btn-grad text-white`}>
         <PenLine size={18} /> Generator
       </Link>
-      <Link to="/pricing" onClick={onNavigate} className={`${item} text-gray-300 hover:bg-white/5 no-underline`}>
-        <Crown size={18} /> Plans
+      <Link to="/pricing" onClick={onNavigate} className={`${item} bg-white/5 border border-white/10 text-gray-200 hover:bg-white/10`}>
+        <CreditCard size={18} /> Billing & Plans
       </Link>
-      <Link to="/pricing" onClick={onNavigate} className={`${item} text-gray-300 hover:bg-white/5 no-underline`}>
-        <CreditCard size={18} /> Billing
-      </Link>
+      {!isPaid && (
+        <Link to="/pricing" onClick={onNavigate}
+          className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl text-sm font-bold btn-grad text-white no-underline mt-1">
+          <Crown size={17} /> Upgrade to Pro
+        </Link>
+      )}
     </nav>
   )
 }
