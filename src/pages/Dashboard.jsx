@@ -119,7 +119,7 @@ export default function Dashboard() {
             </div>
             {error && <p className="text-red-400 text-sm">{error}</p>}
             <button onClick={handleGenerate} disabled={loading}
-              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition-all duration-200 disabled:opacity-50 hover:scale-[1.02]">
+              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl btn-grad text-white font-semibold transition-all duration-200 disabled:opacity-50 hover:scale-[1.02]">
               {loading ? <><RefreshCw size={18} className="animate-spin" /> Generating...</> : <><Sparkles size={18} /> Generate Post</>}
             </button>
           </div>
@@ -160,7 +160,7 @@ export default function Dashboard() {
               <p className="font-semibold text-white">{credits === 0 ? 'You’re out of credits' : 'Running low on credits'}</p>
               <p className="text-gray-400 text-sm mt-0.5">Upgrade to Pro for unlimited AI posts every month.</p>
             </div>
-            <button onClick={() => navigate('/pricing')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-sm font-semibold text-white transition-colors whitespace-nowrap">
+            <button onClick={() => navigate('/pricing')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl btn-grad text-sm font-semibold text-white transition-colors whitespace-nowrap">
               Upgrade <ChevronRight size={16} />
             </button>
           </div>

@@ -53,13 +53,17 @@ export default function Pricing() {
           <p className="text-gray-400 text-lg">Start free. Upgrade when you're ready to scale.</p>
         </div>
 
-        <div className="flex items-center justify-center gap-3 mb-12">
-          <span className={`text-sm ${!yearly ? 'text-white' : 'text-gray-500'}`}>Monthly</span>
-          <button onClick={() => setYearly(!yearly)} aria-label="Toggle billing period"
-            className="relative w-12 h-6 rounded-full bg-white/10 transition-colors">
-            <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-indigo-500 transition-transform ${yearly ? 'translate-x-6' : ''}`} />
-          </button>
-          <span className={`text-sm ${yearly ? 'text-white' : 'text-gray-500'}`}>Yearly <span className="text-indigo-400">(save 20%)</span></span>
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex p-1 rounded-xl bg-white/5 border border-white/10">
+            <button onClick={() => setYearly(false)} aria-pressed={!yearly}
+              className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${!yearly ? 'btn-grad text-white' : 'text-gray-400 hover:text-white'}`}>
+              Monthly
+            </button>
+            <button onClick={() => setYearly(true)} aria-pressed={yearly}
+              className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 ${yearly ? 'btn-grad text-white' : 'text-gray-400 hover:text-white'}`}>
+              Yearly <span className={`text-xs ${yearly ? 'text-indigo-100' : 'text-indigo-400'}`}>-20%</span>
+            </button>
+          </div>
         </div>
 
         <div className="grid sm:grid-cols-3 gap-5">
@@ -71,6 +75,9 @@ export default function Pricing() {
                 <span className="text-4xl font-display font-bold">${yearly ? p.yearly : p.monthly}</span>
                 <span className="text-gray-400 mb-1">/mo</span>
               </div>
+              {yearly && p.monthly > 0 && (
+                <p className="text-xs text-indigo-300 mb-2">Billed ${p.yearly * 12}/year</p>
+              )}
               <p className="text-gray-400 text-sm mb-5">{p.desc}</p>
               <ul className="flex flex-col gap-2.5 mb-6 flex-1">
                 {p.features.map(f => (
@@ -80,7 +87,7 @@ export default function Pricing() {
                 ))}
               </ul>
               <button onClick={() => handleSelect(p)} disabled={loadingPlan === p.id}
-                className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 disabled:opacity-50 ${p.highlight ? 'bg-indigo-600 hover:bg-indigo-500 text-white' : 'glass glass-hover text-white'}`}>
+                className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 disabled:opacity-50 ${p.highlight ? 'btn-grad text-white' : 'glass glass-hover text-white'}`}>
                 {loadingPlan === p.id ? <Loader2 size={16} className="animate-spin" /> : p.id !== 'free' ? <Sparkles size={15} /> : null}
                 {p.cta}
               </button>

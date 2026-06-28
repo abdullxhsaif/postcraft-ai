@@ -37,3 +37,25 @@ body {
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 8px; }
+
+/* ── Global button & interaction polish ───────────────────────────── */
+button, a { -webkit-tap-highlight-color: transparent; }
+button:not(:disabled), a[role="button"] { cursor: pointer; }
+button:not(:disabled):active { transform: scale(0.97); }
+a:active { transform: scale(0.98); }
+:focus-visible { outline: 2px solid #818cf8; outline-offset: 2px; border-radius: 8px; }
+
+/* Premium gradient primary button — applied app-wide */
+.btn-grad {
+  background: linear-gradient(110deg, #6366f1 0%, #8b5cf6 100%);
+  color: #fff;
+  box-shadow: 0 8px 22px -8px rgba(99, 102, 241, 0.6);
+  transition: filter .18s ease, box-shadow .18s ease, transform .12s ease;
+}
+.btn-grad:hover { filter: brightness(1.1); box-shadow: 0 12px 28px -8px rgba(99, 102, 241, 0.7); }
+.btn-grad:active { transform: scale(0.97); }
+
+/* Bigger tap targets on mobile */
+@media (max-width: 640px) {
+  button, a[role="button"] { min-height: 44px; }
+}

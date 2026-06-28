@@ -89,15 +89,15 @@ export default function Auth({ mode }) {
             </div>
             {error && <p className="text-red-400 text-sm" role="alert">{error}</p>}
             <button type="submit" disabled={loading}
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl btn-grad text-white font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
               {loading ? <Loader2 size={18} className="animate-spin" /> : null}
               {loading ? 'Please wait...' : isSignup ? 'Create account' : 'Sign in'}
             </button>
           </form>
 
-          <p className="text-center text-gray-500 text-sm mt-6">
+          <p className="text-center text-gray-300 text-sm mt-6">
             {isSignup ? 'Already have an account? ' : "Don't have an account? "}
-            <Link to={isSignup ? '/login' : '/signup'} className="text-indigo-400 hover:text-indigo-300 font-medium no-underline">
+            <Link to={isSignup ? '/login' : '/signup'} className="text-indigo-300 hover:text-indigo-200 font-semibold underline underline-offset-2 decoration-indigo-400/40">
               {isSignup ? 'Sign in' : 'Sign up free'}
             </Link>
           </p>

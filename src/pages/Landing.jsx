@@ -26,7 +26,7 @@ export default function Landing() {
             Stop staring at a blank screen. Paste your ideas, pick your tone, and let AI craft posts that get likes, comments, and connections.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/signup" className="flex items-center gap-2 px-8 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-lg transition-all duration-200 hover:scale-105 shadow-lg shadow-indigo-500/25 no-underline">
+            <Link to="/signup" className="flex items-center gap-2 px-8 py-4 rounded-xl btn-grad text-white font-semibold text-lg transition-all duration-200 hover:scale-105 shadow-lg shadow-indigo-500/25 no-underline">
               Start for Free <ArrowRight size={20} />
             </Link>
             <div className="flex items-center gap-1 text-gray-400 text-sm">
@@ -71,11 +71,50 @@ export default function Landing() {
         </div>
       </section>
 
+
+      {/* Pricing — all plans on one page */}
+      <section id="pricing" className="max-w-5xl mx-auto px-4 sm:px-6 py-24 scroll-mt-20">
+        <div className="text-center mb-14">
+          <h2 className="text-4xl font-display font-bold mb-4">Simple, transparent pricing</h2>
+          <p className="text-gray-400 text-lg">Start free. Upgrade when you're ready to scale.</p>
+        </div>
+        <div className="grid sm:grid-cols-3 gap-5">
+          {[
+            { name: 'Free', price: '$0', desc: 'Try it with no commitment.', highlight: false,
+              features: ['5 AI posts / month', '2 tone options', 'Copy to clipboard'] },
+            { name: 'Pro', price: '$19', desc: 'For serious LinkedIn creators.', highlight: true, badge: 'Most Popular',
+              features: ['Unlimited AI posts', 'All 6 tones', 'All post types', 'Post history'] },
+            { name: 'Team', price: '$49', desc: 'For agencies and teams.', highlight: false,
+              features: ['Everything in Pro', 'Up to 5 seats', 'Brand voice', 'Priority support'] },
+          ].map(p => (
+            <div key={p.name} className={`relative rounded-2xl p-6 border flex flex-col ${p.highlight ? 'bg-indigo-600/10 border-indigo-500/40' : 'glass'}`}>
+              {p.badge && <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full btn-grad text-xs font-semibold text-white">{p.badge}</div>}
+              <h3 className="font-display font-bold text-lg mb-1">{p.name}</h3>
+              <div className="flex items-end gap-1 mb-2">
+                <span className="text-4xl font-display font-bold">{p.price}</span>
+                <span className="text-gray-400 mb-1">/mo</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-5">{p.desc}</p>
+              <ul className="flex flex-col gap-2.5 mb-6 flex-1">
+                {p.features.map(f => (
+                  <li key={f} className="flex items-center gap-2 text-sm text-gray-300">
+                    <Check size={15} className="text-indigo-400 flex-shrink-0" /> {f}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/pricing" className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 no-underline ${p.highlight ? 'btn-grad text-white' : 'glass glass-hover text-white'}`}>
+                {p.name === 'Free' ? 'Start Free' : `Get ${p.name}`}
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="max-w-4xl mx-auto px-4 sm:px-6 pb-24">
         <div className="glass rounded-3xl p-10 text-center">
           <h2 className="text-3xl sm:text-4xl font-display font-bold mb-4">Ready to grow on LinkedIn?</h2>
           <p className="text-gray-400 mb-8">Join thousands of creators. Start free, no card required.</p>
-          <Link to="/signup" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition-all hover:scale-105 no-underline">
+          <Link to="/signup" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl btn-grad text-white font-semibold transition-all hover:scale-105 no-underline">
             Get Started Free <ArrowRight size={18} />
           </Link>
         </div>

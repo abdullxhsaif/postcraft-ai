@@ -25,13 +25,13 @@ export default function Navbar() {
           <Link to="/pricing" className="text-gray-400 hover:text-white text-sm transition-colors">Pricing</Link>
           {user ? (
             <div className="flex items-center gap-3">
-              <Link to="/dashboard" className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm font-medium text-white transition-colors no-underline">Dashboard</Link>
+              <Link to="/dashboard" className="px-4 py-2 rounded-lg btn-grad text-sm font-medium text-white transition-colors no-underline">Dashboard</Link>
               <button onClick={handleLogout} aria-label="Log out" className="text-gray-400 hover:text-white transition-colors"><LogOut size={18} /></button>
             </div>
           ) : (
             <>
               <Link to="/login" className="text-gray-300 hover:text-white text-sm transition-colors no-underline">Sign in</Link>
-              <Link to="/signup" className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm font-medium text-white transition-colors no-underline">Get Started</Link>
+              <Link to="/signup" className="px-4 py-2 rounded-lg btn-grad text-sm font-medium text-white transition-colors no-underline">Get Started</Link>
             </>
           )}
         </div>
