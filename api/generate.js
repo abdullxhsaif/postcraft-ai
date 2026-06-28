@@ -31,14 +31,22 @@ async function viaGemini(prompt, key) {
 }
 
 async function viaFreeProvider(prompt) {
-  // Pollinations — free, no API key required.
-  const r = await fetch('https://text.pollinations.ai/openai', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'openai', messages: [{ role: 'user', content: prompt }], temperature: 0.8 }),
-  })
-  if (!r.ok) throw new Error('AI provider unavailable, please try again.')
-  const d = await r.json()
-  return (d?.choices?.[0]?.message?.content || '').trim()
+  // Pollinations — free, no API key required. Try OpenAI-style POST, then plain GET.
+  try {
+    const r = await fetch('https://text.pollinations.ai/openai', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'openai', messages: [{ role: 'user', content: prompt }], temperature: 0.8 }),
+    })
+    if (r.ok) {
+      const d = await r.json()
+      const t = (d?.choices?.[0]?.message?.content || '').trim()
+      if (t) return t
+    }
+  } catch {}
+  // Fallback: plain text GET endpoint
+  const g = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=openai`)
+  if (!g.ok) throw new Error('AI provider is busy. Please try again in a moment.')
+  return (await g.text()).trim()
 }
 
 export default async function handler(req, res) {
