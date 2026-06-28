@@ -29,10 +29,7 @@ export default function Landing() {
             <Link to="/signup" className="flex items-center gap-2 px-8 py-4 rounded-xl btn-grad text-white font-semibold text-lg transition-all duration-200 hover:scale-105 shadow-lg shadow-indigo-500/25 no-underline">
               Start for Free <ArrowRight size={20} />
             </Link>
-            <div className="flex items-center gap-1 text-gray-400 text-sm">
-              <Star size={14} className="text-yellow-400 fill-yellow-400" />
-              <span>4.9/5 from 2,000+ creators</span>
-            </div>
+            <span className="text-gray-500 text-sm">No credit card required</span>
           </div>
         </div>
 
