@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Sparkles, Copy, RefreshCw, Check, ChevronRight, User, Linkedin, Loader2, CreditCard } from 'lucide-react'
+import { Sparkles, Copy, RefreshCw, Check, ChevronRight, User, Linkedin, Loader2, CreditCard, PenLine } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
 import Sidebar from '../components/Sidebar'
