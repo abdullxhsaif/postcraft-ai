@@ -26,8 +26,8 @@ export default async function handler(req, res) {
     const { notes, tone = 'professional', type = 'story' } = req.body || {}
     if (!notes || !notes.trim()) return res.status(400).json({ error: 'Notes are required' })
 
-    const apiKey = process.env.GEMINI_API_KEY
-    if (!apiKey) return res.status(500).json({ error: 'AI is not configured yet (add GEMINI_API_KEY).' })
+    const apiKey = req.headers['x-gemini-key'] || process.env.GEMINI_API_KEY
+    if (!apiKey) return res.status(400).json({ error: 'NO_KEY' })
 
     const aiRes = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`,
