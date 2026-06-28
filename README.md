@@ -6,7 +6,7 @@ Turn rough notes into viral LinkedIn posts with AI. React + Vite + Tailwind fron
 - **Frontend:** React 18, Vite, Tailwind CSS, React Router, react-hot-toast
 - **Auth + DB:** Firebase Authentication + Cloud Firestore (free Spark plan)
 - **Payments:** Stripe Checkout + Billing Portal + Webhooks
-- **AI:** OpenAI (`gpt-4o-mini`) via a secure serverless proxy — the key never reaches the browser
+- **AI:** Google Gemini (`gemini-2.0-flash`, free tier) via a secure serverless proxy — the key never reaches the browser
 - **Hosting:** Vercel (static frontend + `/api` serverless functions)
 
 ## Architecture
@@ -39,8 +39,8 @@ cp .env.example .env   # then fill in values
 2. Copy your publishable + secret keys
 3. After deploy, add a webhook endpoint `https://YOUR_DOMAIN/api/webhook` for events: `checkout.session.completed`, `customer.subscription.created/updated/deleted` → copy the signing secret into `STRIPE_WEBHOOK_SECRET`
 
-### 4. OpenAI
-Add your key to `OPENAI_API_KEY`.
+### 4. Google Gemini (free)
+Get a free key at https://aistudio.google.com/apikey and add it to `GEMINI_API_KEY`.
 
 ### 5. Run / deploy
 ```bash

@@ -1,6 +1,7 @@
 import { verifyRequest, adminDb } from './_lib/firebaseAdmin.js'
 
 const FREE_TONES = ['professional', 'storytelling']
+const MODEL = 'gemini-2.0-flash'
 
 function buildPrompt(notes, tone, type) {
   return `You are an expert LinkedIn ghostwriter. Transform these rough notes into a high-performing LinkedIn post.
@@ -44,27 +45,31 @@ export default async function handler(req, res) {
       return null // unlimited
     })
 
-    const apiKey = process.env.OPENAI_API_KEY
-    if (!apiKey) return res.status(500).json({ error: 'AI is not configured (missing OPENAI_API_KEY)' })
+    const apiKey = process.env.GEMINI_API_KEY
+    if (!apiKey) return res.status(500).json({ error: 'AI is not configured (missing GEMINI_API_KEY)' })
 
-    const aiRes = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [{ role: 'user', content: buildPrompt(notes, tone, type) }],
-        temperature: 0.8,
-        max_tokens: 600,
-      }),
-    })
+    const aiRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: buildPrompt(notes, tone, type) }] }],
+          generationConfig: { temperature: 0.8, maxOutputTokens: 800 },
+        }),
+      }
+    )
     const data = await aiRes.json()
     if (data.error) {
-      // refund the credit if the AI call failed
-      if (remaining !== null) await ref.set({ credits: remaining + 1 }, { merge: true })
+      if (remaining !== null) await ref.set({ credits: remaining + 1 }, { merge: true }) // refund on failure
       return res.status(502).json({ error: data.error.message })
     }
 
-    const post = data.choices?.[0]?.message?.content?.trim() || ''
+    const post = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || ''
+    if (!post) {
+      if (remaining !== null) await ref.set({ credits: remaining + 1 }, { merge: true })
+      return res.status(502).json({ error: 'AI returned an empty response. Try again.' })
+    }
     return res.status(200).json({ post, creditsRemaining: remaining })
   } catch (err) {
     if (err.message?.startsWith('LIMIT:')) return res.status(402).json({ error: err.message.replace('LIMIT: ', '') })
