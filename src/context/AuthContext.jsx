@@ -32,13 +32,20 @@ export function AuthProvider({ children }) {
         email: u.email,
         plan: 'free',
         credits: FREE_CREDITS,
+        creditsPeriod: new Date().toISOString().slice(0, 7),
         subscriptionStatus: 'none',
         createdAt: serverTimestamp(),
       }
       await setDoc(ref, data)
       snap = await getDoc(ref)
     }
-    const p = { id: u.uid, ...snap.data() }
+    let p = { id: u.uid, ...snap.data() }
+    // Monthly credit reset for free users
+    const period = new Date().toISOString().slice(0, 7) // YYYY-MM
+    if (p.plan !== 'pro' && p.plan !== 'team' && p.creditsPeriod !== period) {
+      await setDoc(ref, { credits: FREE_CREDITS, creditsPeriod: period }, { merge: true })
+      p = { ...p, credits: FREE_CREDITS, creditsPeriod: period }
+    }
     setProfile(p)
     return p
   }, [])

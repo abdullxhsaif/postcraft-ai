@@ -4,12 +4,12 @@ service cloud.firestore {
     match /users/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
       allow create: if request.auth != null && request.auth.uid == uid;
-      // User may update their own profile but:
-      //  - cannot change their own plan (only Stripe/admin should)
-      //  - can only keep or DECREASE credits (never grant themselves more)
+      // User can update their own profile but cannot change their plan, and
+      // credits are capped at the free limit (5) so they can't grant themselves more.
+      // This also allows the monthly reset (back up to 5).
       allow update: if request.auth != null && request.auth.uid == uid
         && request.resource.data.plan == resource.data.plan
-        && request.resource.data.credits <= resource.data.credits;
+        && request.resource.data.credits <= 5;
       allow delete: if false;
     }
   }

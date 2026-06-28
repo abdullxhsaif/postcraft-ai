@@ -33,9 +33,6 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState('')
-  const [apiKey, setApiKey] = useState(() => (typeof localStorage !== 'undefined' && localStorage.getItem('gemini_key')) || '')
-  const [showKey, setShowKey] = useState(false)
-  const saveKey = (v) => { setApiKey(v); if (typeof localStorage !== 'undefined') localStorage.setItem('gemini_key', v.trim()) }
 
   const isPaid = profile && (profile.plan === 'pro' || profile.plan === 'team')
   const credits = profile?.credits ?? 0
@@ -117,21 +114,6 @@ export default function Dashboard() {
                 </select>
               </div>
             </div>
-            <button type="button" onClick={() => setShowKey(v => !v)} className="self-start text-[11px] text-gray-500 hover:text-gray-300">
-              {showKey ? 'Hide AI key settings' : 'Use your own Gemini key (optional, higher quality)'}
-            </button>
-            {showKey && (
-              <div className="rounded-xl bg-white/5 border border-white/10 p-3 flex flex-col gap-2">
-                <label className="text-xs font-medium text-gray-300 flex items-center justify-between">
-                  <span>Gemini API key (free)</span>
-                  <a href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer" className="text-indigo-300 hover:text-indigo-200 no-underline">Get a key →</a>
-                </label>
-                <input type="password" value={apiKey} onChange={e => saveKey(e.target.value)} placeholder="Paste your AIza... key"
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-sm" />
-                <p className="text-[11px] text-gray-500">Stored only in your browser. Used to generate your posts.</p>
-              </div>
-            )}
-
             {error && <p className="text-red-400 text-sm">{error}</p>}
             <button onClick={handleGenerate} disabled={loading}
               className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl btn-grad text-white font-semibold transition-all duration-200 disabled:opacity-50 hover:scale-[1.02]">
