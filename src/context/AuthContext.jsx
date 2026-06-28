@@ -7,7 +7,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from 'firebase/auth'
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore'
 import { auth, db, isFirebaseConfigured } from '../lib/firebase'
 
 const AuthContext = createContext(null)
@@ -68,8 +68,15 @@ export function AuthProvider({ children }) {
     return u
   }
   const logout = () => signOut(auth)
+  const consumeCredit = async () => {
+    if (!db || !user || !profile) return
+    if (profile.plan === 'pro' || profile.plan === 'team') return
+    const next = Math.max(0, (profile.credits ?? 0) - 1)
+    await updateDoc(doc(db, 'users', user.uid), { credits: next })
+    setProfile(p => ({ ...p, credits: next }))
+  }
   const refreshProfile = () => user && loadProfile(user)
 
-  const value = { user, profile, loading, signup, login, loginWithGoogle, logout, refreshProfile, isFirebaseConfigured }
+  const value = { user, profile, loading, signup, login, loginWithGoogle, logout, consumeCredit, refreshProfile, isFirebaseConfigured }
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

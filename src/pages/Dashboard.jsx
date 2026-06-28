@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Sparkles, Copy, RefreshCw, Check, ChevronRight, User, Linkedin, Loader2, CreditCard } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
-import { generatePost, openBillingPortal } from '../lib/api'
+import { generatePost } from '../lib/api'
 
 const TONES = [
   { value: 'professional', label: 'Professional' },
@@ -23,30 +23,32 @@ const TYPES = [
 ]
 
 export default function Dashboard() {
-  const { profile, refreshProfile } = useAuth()
+  const { profile, consumeCredit } = useAuth()
   const navigate = useNavigate()
   const [notes, setNotes] = useState('')
   const [tone, setTone] = useState('professional')
   const [type, setType] = useState('story')
   const [output, setOutput] = useState('')
   const [loading, setLoading] = useState(false)
-  const [portalLoading, setPortalLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState('')
 
   const isPaid = profile && (profile.plan === 'pro' || profile.plan === 'team')
   const credits = profile?.credits ?? 0
 
+  const FREE_TONES = ['professional', 'storytelling']
+
   const handleGenerate = async () => {
     if (!notes.trim()) { setError('Add some notes first.'); return }
+    if (!isPaid && !FREE_TONES.includes(tone)) { setError('That tone is a Pro feature. Upgrade to unlock all tones.'); return }
+    if (!isPaid && credits <= 0) { setError('No credits left. Upgrade to Pro for unlimited posts.'); return }
     setLoading(true); setError('')
     try {
       const { post } = await generatePost(notes, tone, type)
       setOutput(post)
-      await refreshProfile()
+      await consumeCredit()
     } catch (err) {
-      if (/limit|credit/i.test(err.message)) setError(err.message)
-      else setError('Generation failed: ' + err.message)
+      setError('Generation failed: ' + err.message)
     } finally {
       setLoading(false)
     }
@@ -59,15 +61,7 @@ export default function Dashboard() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const handleBilling = async () => {
-    setPortalLoading(true)
-    try {
-      const { url } = await openBillingPortal()
-      window.location.href = url
-    } catch {
-      navigate('/pricing')
-    } finally { setPortalLoading(false) }
-  }
+  const handleBilling = () => navigate('/pricing')
 
   return (
     <div className="min-h-screen bg-[#07070b] text-white pt-20">
@@ -86,9 +80,9 @@ export default function Dashboard() {
               <span className="text-gray-400">Credits: </span>
               <span className="text-indigo-400 font-semibold">{isPaid ? '∞' : credits}</span>
             </div>
-            <button onClick={handleBilling} disabled={portalLoading}
+            <button onClick={handleBilling}
               className="glass glass-hover rounded-xl px-4 py-2 flex items-center gap-2 text-sm text-gray-300">
-              {portalLoading ? <Loader2 size={15} className="animate-spin" /> : <CreditCard size={15} />} Billing
+              <CreditCard size={15} /> Billing
             </button>
           </div>
         </div>

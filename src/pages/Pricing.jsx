@@ -3,13 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { Check, Sparkles, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
-import { startCheckout } from '../lib/api'
 
-const PRICES = {
-  proMonthly: import.meta.env.VITE_STRIPE_PRICE_PRO_MONTHLY,
-  proYearly: import.meta.env.VITE_STRIPE_PRICE_PRO_YEARLY,
-  teamMonthly: import.meta.env.VITE_STRIPE_PRICE_TEAM_MONTHLY,
-  teamYearly: import.meta.env.VITE_STRIPE_PRICE_TEAM_YEARLY,
+const PAYMENT_LINKS = {
+  proMonthly: 'https://buy.stripe.com/8x200j4ZwgZw0kq2tZe3e01',
+  proYearly: 'https://buy.stripe.com/14AdR91NkbFcc385Gbe3e02',
+  teamMonthly: 'https://buy.stripe.com/4gM4gz0JggZw1ou7Oje3e03',
+  teamYearly: 'https://buy.stripe.com/fZucN54ZwgZwc381pVe3e04',
 }
 
 export default function Pricing() {
@@ -24,25 +23,19 @@ export default function Pricing() {
     { id: 'pro', name: 'Pro', monthly: 19, yearly: 15, desc: 'For creators serious about LinkedIn growth.',
       features: ['Unlimited AI posts', 'All 6 tone options', 'All post types', 'Post history', 'Priority generation'],
       cta: 'Get Pro', highlight: true, badge: 'Most Popular',
-      price: () => yearly ? PRICES.proYearly : PRICES.proMonthly },
+      link: () => yearly ? PAYMENT_LINKS.proYearly : PAYMENT_LINKS.proMonthly },
     { id: 'team', name: 'Team', monthly: 49, yearly: 39, desc: 'For agencies and teams.',
       features: ['Everything in Pro', 'Up to 5 seats', 'Team post library', 'Brand voice settings', 'Priority support'],
-      cta: 'Get Team', price: () => yearly ? PRICES.teamYearly : PRICES.teamMonthly },
+      cta: 'Get Team', link: () => yearly ? PAYMENT_LINKS.teamYearly : PAYMENT_LINKS.teamMonthly },
   ]
 
-  const handleSelect = async (plan) => {
+  const handleSelect = (plan) => {
     if (plan.id === 'free') { navigate(user ? '/dashboard' : '/signup'); return }
     if (!user) { navigate('/login'); return }
-    const priceId = plan.price()
-    if (!priceId) { toast.error('Price not configured. Add your Stripe price IDs to .env.'); return }
     setLoadingPlan(plan.id)
-    try {
-      const { url } = await startCheckout(priceId)
-      window.location.href = url
-    } catch (err) {
-      toast.error(err.message)
-      setLoadingPlan(null)
-    }
+    const url = plan.link()
+    const email = user?.email ? `?prefilled_email=${encodeURIComponent(user.email)}` : ''
+    window.location.href = url + email
   }
 
   return (

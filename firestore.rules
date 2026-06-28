@@ -3,13 +3,13 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
-      // User may create their own profile on signup.
       allow create: if request.auth != null && request.auth.uid == uid;
-      // User may update non-billing fields only. Plan & credits are changed
-      // exclusively by the server (Admin SDK bypasses these rules).
+      // User may update their own profile but:
+      //  - cannot change their own plan (only Stripe/admin should)
+      //  - can only keep or DECREASE credits (never grant themselves more)
       allow update: if request.auth != null && request.auth.uid == uid
         && request.resource.data.plan == resource.data.plan
-        && request.resource.data.credits == resource.data.credits;
+        && request.resource.data.credits <= resource.data.credits;
       allow delete: if false;
     }
   }
