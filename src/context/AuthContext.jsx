@@ -4,6 +4,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from 'firebase/auth'
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { auth, db, isFirebaseConfigured } from '../lib/firebase'
@@ -59,9 +61,15 @@ export function AuthProvider({ children }) {
     await loadProfile(u)
     return u
   }
+  const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider()
+    const { user: u } = await signInWithPopup(auth, provider)
+    await loadProfile(u)
+    return u
+  }
   const logout = () => signOut(auth)
   const refreshProfile = () => user && loadProfile(user)
 
-  const value = { user, profile, loading, signup, login, logout, refreshProfile, isFirebaseConfigured }
+  const value = { user, profile, loading, signup, login, loginWithGoogle, logout, refreshProfile, isFirebaseConfigured }
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
