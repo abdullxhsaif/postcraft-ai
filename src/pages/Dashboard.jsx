@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Sparkles, Copy, RefreshCw, Check, ChevronRight, User, Linkedin, Loader2, CreditCard } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
+import Sidebar from '../components/Sidebar'
 import { generatePost } from '../lib/api'
 
 const TONES = [
@@ -64,8 +65,10 @@ export default function Dashboard() {
   const handleBilling = () => navigate('/pricing')
 
   return (
-    <div className="min-h-screen bg-[#07070b] text-white pt-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+    <div className="flex min-h-screen bg-[#07070b] text-white">
+      <Sidebar />
+      <main className="flex-1 min-w-0 pt-14 lg:pt-0">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 lg:py-10">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-2xl font-display font-bold">Post Generator</h1>
@@ -160,6 +163,7 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+      </main>
     </div>
   )
 }

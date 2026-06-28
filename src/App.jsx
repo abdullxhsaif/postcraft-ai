@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import ProtectedRoute from './components/ProtectedRoute'
 import ConfigBanner from './components/ConfigBanner'
@@ -8,9 +8,11 @@ import Pricing from './pages/Pricing'
 import Dashboard from './pages/Dashboard'
 
 export default function App() {
+  const { pathname } = useLocation()
+  const hideNav = pathname.startsWith('/dashboard')
   return (
     <>
-      <Navbar />
+      {!hideNav && <Navbar />}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Auth mode="login" />} />

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Sparkles, Loader2, Mail, Lock } from 'lucide-react'
+import { Sparkles, Loader2, Mail, Lock, Github } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
 
@@ -14,7 +14,7 @@ const PRETTY = {
 
 export default function Auth({ mode }) {
   const isSignup = mode === 'signup'
-  const { login, signup, loginWithGoogle, isFirebaseConfigured } = useAuth()
+  const { login, signup, loginWithProvider, isFirebaseConfigured } = useAuth()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -37,15 +37,17 @@ export default function Auth({ mode }) {
     }
   }
 
-  const handleGoogle = async () => {
+  const handleSocial = async (name) => {
     if (!isFirebaseConfigured) { setError('Firebase is not configured yet. Add your .env keys.'); return }
     setLoading(true); setError('')
     try {
-      await loginWithGoogle()
+      await loginWithProvider(name)
       toast.success('Welcome!')
       navigate('/dashboard')
     } catch (err) {
-      if (err.code !== 'auth/popup-closed-by-user') setError(PRETTY[err.code] || err.message || 'Google sign-in failed.')
+      if (err.code === 'auth/operation-not-allowed') setError(`${name[0].toUpperCase() + name.slice(1)} login isn't enabled yet — enable it in Firebase.`)
+      else if (err.code === 'auth/account-exists-with-different-credential') setError('You already signed up with a different method for this email.')
+      else if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') setError(PRETTY[err.code] || err.message || 'Sign-in failed.')
     } finally {
       setLoading(false)
     }
@@ -64,15 +66,30 @@ export default function Auth({ mode }) {
           <h1 className="text-2xl font-display font-bold mb-1">{isSignup ? 'Create your account' : 'Welcome back'}</h1>
           <p className="text-gray-400 text-sm mb-6">{isSignup ? 'Start crafting viral posts free — no card required.' : 'Sign in to continue to your dashboard.'}</p>
 
-          <button type="button" onClick={handleGoogle} disabled={loading}
-            className="flex items-center justify-center gap-2.5 w-full py-3 rounded-xl bg-white text-gray-800 font-semibold hover:bg-gray-100 transition-colors disabled:opacity-50 mb-4">
+          <button type="button" onClick={() => handleSocial('google')} disabled={loading}
+            className="flex items-center justify-center gap-2.5 w-full py-3 rounded-xl bg-white text-gray-800 font-semibold hover:bg-gray-100 transition-colors disabled:opacity-50 mb-3">
             <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.71-1.57 2.68-3.88 2.68-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.72A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.29-1.72V4.95H.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.05l3.01-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>
             Continue with Google
           </button>
 
+          <div className="grid grid-cols-3 gap-3 mb-4">
+            <button type="button" onClick={() => handleSocial('facebook')} disabled={loading} aria-label="Continue with Facebook"
+              className="flex items-center justify-center py-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors disabled:opacity-50">
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="#1877F2" d="M24 12a12 12 0 1 0-13.88 11.85v-8.38H7.08V12h3.04V9.36c0-3 1.79-4.67 4.53-4.67 1.31 0 2.68.24 2.68.24v2.95h-1.51c-1.49 0-1.95.92-1.95 1.87V12h3.32l-.53 3.47h-2.79v8.38A12 12 0 0 0 24 12z"/></svg>
+            </button>
+            <button type="button" onClick={() => handleSocial('twitter')} disabled={loading} aria-label="Continue with X"
+              className="flex items-center justify-center py-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors disabled:opacity-50">
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.58-6.64 7.58H.46l8.6-9.83L0 1.15h7.6l5.24 6.93 6.06-6.93zm-1.29 19.5h2.04L6.49 3.24H4.3z"/></svg>
+            </button>
+            <button type="button" onClick={() => handleSocial('github')} disabled={loading} aria-label="Continue with GitHub"
+              className="flex items-center justify-center py-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors disabled:opacity-50">
+              <Github size={20} className="text-white" />
+            </button>
+          </div>
+
           <div className="flex items-center gap-3 mb-4">
             <div className="flex-1 h-px bg-white/10" />
-            <span className="text-gray-500 text-xs">or</span>
+            <span className="text-gray-500 text-xs">or with email</span>
             <div className="flex-1 h-px bg-white/10" />
           </div>
 

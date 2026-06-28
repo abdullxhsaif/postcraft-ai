@@ -5,6 +5,9 @@ import {
   signOut,
   onAuthStateChanged,
   GoogleAuthProvider,
+  FacebookAuthProvider,
+  TwitterAuthProvider,
+  GithubAuthProvider,
   signInWithPopup,
 } from 'firebase/auth'
 import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore'
@@ -61,8 +64,14 @@ export function AuthProvider({ children }) {
     await loadProfile(u)
     return u
   }
-  const loginWithGoogle = async () => {
-    const provider = new GoogleAuthProvider()
+  const PROVIDERS = {
+    google: () => new GoogleAuthProvider(),
+    facebook: () => new FacebookAuthProvider(),
+    twitter: () => new TwitterAuthProvider(),
+    github: () => new GithubAuthProvider(),
+  }
+  const loginWithProvider = async (name) => {
+    const provider = PROVIDERS[name]()
     const { user: u } = await signInWithPopup(auth, provider)
     await loadProfile(u)
     return u
@@ -77,6 +86,6 @@ export function AuthProvider({ children }) {
   }
   const refreshProfile = () => user && loadProfile(user)
 
-  const value = { user, profile, loading, signup, login, loginWithGoogle, logout, consumeCredit, refreshProfile, isFirebaseConfigured }
+  const value = { user, profile, loading, signup, login, loginWithProvider, logout, consumeCredit, refreshProfile, isFirebaseConfigured }
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
