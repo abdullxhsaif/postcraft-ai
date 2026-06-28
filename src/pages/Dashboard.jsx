@@ -68,29 +68,29 @@ export default function Dashboard() {
     <div className="flex min-h-screen bg-[#07070b] text-white">
       <Sidebar />
       <main className="flex-1 min-w-0 pt-14 lg:pt-0">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 lg:py-10">
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+      <div className="max-w-4xl mx-auto px-3 sm:px-6 py-6 sm:py-8 lg:py-10">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
           <div>
-            <h1 className="text-2xl font-display font-bold">Post Generator</h1>
+            <h1 className="text-xl sm:text-2xl font-display font-bold">Post Generator</h1>
             <p className="text-gray-400 text-sm mt-0.5">Turn your ideas into LinkedIn gold</p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="glass rounded-xl px-4 py-2 text-sm">
+          <div className="flex items-center gap-2 overflow-x-auto -mx-1 px-1 sm:gap-3">
+            <div className="glass rounded-xl px-3 py-2 text-sm whitespace-nowrap flex-shrink-0">
               <span className="text-gray-400">Plan: </span>
               <span className="text-indigo-400 font-semibold capitalize">{profile?.plan || 'free'}</span>
             </div>
-            <div className="glass rounded-xl px-4 py-2 text-sm">
+            <div className="glass rounded-xl px-3 py-2 text-sm whitespace-nowrap flex-shrink-0">
               <span className="text-gray-400">Credits: </span>
               <span className="text-indigo-400 font-semibold">{isPaid ? '∞' : credits}</span>
             </div>
             <button onClick={handleBilling}
-              className="glass glass-hover rounded-xl px-4 py-2 flex items-center gap-2 text-sm text-gray-300">
+              className="glass glass-hover rounded-xl px-3 py-2 flex items-center gap-2 text-sm text-gray-300 whitespace-nowrap flex-shrink-0">
               <CreditCard size={15} /> Billing
             </button>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-5 sm:gap-6">
           <div className="glass rounded-2xl p-5 flex flex-col gap-4">
             <div>
               <label className="text-sm font-medium text-gray-300 mb-2 block">Your rough notes</label>

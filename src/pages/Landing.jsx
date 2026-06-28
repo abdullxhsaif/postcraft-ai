@@ -19,10 +19,10 @@ export default function Landing() {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm font-medium mb-6">
             <Sparkles size={14} /> AI-Powered LinkedIn Growth
           </div>
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold leading-[1.1] tracking-tight mb-6">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display font-bold leading-[1.1] tracking-tight mb-6">
             Turn rough notes into <span className="text-gradient">viral LinkedIn posts</span>
           </h1>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed">
             Stop staring at a blank screen. Paste your ideas, pick your tone, and let AI craft posts that get likes, comments, and connections.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
