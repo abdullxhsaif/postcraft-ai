@@ -1,5 +1,7 @@
 # PostCraft AI
 
+🔗 **Live demo: https://postcraft-ai-zqr3.vercel.app**
+
 Turn rough notes into viral LinkedIn posts with AI. React + Vite + Tailwind frontend, Firebase Auth/Firestore, Stripe subscriptions, and serverless functions on Vercel.
 
 ## Stack
