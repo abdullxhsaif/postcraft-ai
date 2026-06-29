@@ -28,7 +28,7 @@ export default function Navbar() {
         {Logo}
 
         <div className="hidden sm:flex items-center gap-6">
-          <Link to="/#features" className="text-gray-400 hover:text-white text-sm transition-colors no-underline">Features</Link>
+          {/* <Link to="/#features" className="text-gray-400 hover:text-white text-sm transition-colors no-underline">Features</Link> */}
           <Link to="/pricing" className="text-gray-400 hover:text-white text-sm transition-colors no-underline">Pricing</Link>
           {user ? (
             <div className="flex items-center gap-3">
